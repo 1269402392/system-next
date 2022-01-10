@@ -7,14 +7,8 @@
       <el-row>
         <template v-for="item in formItems" :key="item.label">
           <el-col v-bind="colLayout">
-            <el-form-item
-              :label="item.label"
-              :rules="item.rules"
-              :style="itemStyle"
-            >
-              <template
-                v-if="item.type === 'input' || item.type === 'password'"
-              >
+            <el-form-item :label="item.label" :rules="item.rules" :style="itemStyle">
+              <template v-if="item.type === 'input' || item.type === 'password'">
                 <el-input
                   v-model="formData[`${item.field}`]"
                   :placeholder="item.placeholder"
@@ -39,7 +33,7 @@
                 <el-date-picker
                   v-model="formData[`${item.field}`]"
                   style="width: 100%"
-                  v-bind:="item.otherOptions"
+                  v-bind="item.otherOptions"
                 >
                 </el-date-picker>
               </template>
@@ -112,7 +106,7 @@ export default defineComponent({
   font-size: 20px;
 }
 .ly-form {
-  padding: 0px 30px 20px 0px;
+  padding: 0 30px 20px 0;
   box-sizing: border-box;
 }
 .el-col {

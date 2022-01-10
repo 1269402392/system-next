@@ -4,27 +4,22 @@
       <slot name="header"></slot>
     </div>
     <el-table
-      :data="listData"
-      @selection-change="handleSelectionChange"
       :border="true"
+      :data="listData"
       style="width: 100%"
+      @selection-change="handleSelectionChange"
     >
-      <el-table-column
-        width="60"
-        v-if="showSelectCloumn"
-        type="selection"
-        align="center"
-      >
+      <el-table-column v-if="showSelectCloumn" align="center" type="selection" width="60">
       </el-table-column>
       <el-table-column
         v-if="showIndexCloumn"
-        type="index"
         align="center"
-        width="70"
         label="序号"
+        type="index"
+        width="70"
       ></el-table-column>
       <template v-for="(propItem, index) in propList" :key="index">
-        <el-table-column v-bind="propItem" :align="'center'">
+        <el-table-column :align="'center'" v-bind="propItem">
           <template #default="scope">
             <slot :name="propItem.slotName" :row="scope.row">
               {{ scope.row[propItem.prop] }}
@@ -42,6 +37,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { ITableType } from '../type'
+
 export default defineComponent({
   name: 'Table',
   props: {
