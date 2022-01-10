@@ -28,9 +28,7 @@
         <el-link type="primary">忘记密码</el-link>
       </div>
 
-      <el-button class="submit" type="primary" @click="submitClick"
-        >立即登陆
-      </el-button>
+      <el-button class="submit" type="primary" @click="submitClick">立即登陆 </el-button>
     </div>
   </div>
 </template>
