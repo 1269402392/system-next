@@ -28,14 +28,26 @@
         </el-table-column>
       </template>
     </el-table>
+
     <div class="footer">
-      <slot name="footer"></slot>
+      <slot name="footer">
+        <el-pagination
+          v-model:currentPage="currentPage"
+          :page-size="pageInfo.pageSize"
+          :page-sizes="[3, 5, 8]"
+          :total="listCount"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        >
+        </el-pagination>
+      </slot>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 import { ITableType } from '../type'
 
 export default defineComponent({
@@ -44,6 +56,14 @@ export default defineComponent({
     listData: {
       type: Array,
       required: true
+    },
+    listCount: {
+      type: Number,
+      default: 0
+    },
+    pageInfo: {
+      type: Object,
+      default: () => ({ currentPage: 1, pageSize: 10 })
     },
     propList: {
       type: Array as PropType<ITableType[]>,
@@ -58,12 +78,24 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['selectionChange'],
+  emits: ['selectionChange', 'update:pageInfo'],
   setup(props, { emit }) {
     const handleSelectionChange = (value: any) => {
       emit('selectionChange', value)
     }
-    return { handleSelectionChange }
+    const currentPage = ref(0)
+    const handleSizeChange = (pageSize: number) => {
+      emit('update:pageInfo', { ...props.pageInfo, pageSize })
+    }
+    const handleCurrentChange = (currentPage: number) => {
+      emit('update:pageInfo', { ...props.pageInfo, currentPage })
+    }
+    return {
+      currentPage,
+      handleSelectionChange,
+      handleSizeChange,
+      handleCurrentChange
+    }
   }
 })
 </script>
@@ -71,5 +103,9 @@ export default defineComponent({
 <style lang="less" scoped>
 /deep/.el-tag {
   cursor: pointer;
+}
+.el-pagination {
+  text-align: right;
+  margin: 8px 0;
 }
 </style>

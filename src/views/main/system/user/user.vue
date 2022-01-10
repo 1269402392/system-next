@@ -1,36 +1,39 @@
 <template>
   <div class="user">
-    <page-search :SearchFromConfig="SearchFromConfig" />
-    <page-content pageName="users" :TableContentConfig="TableContentConfig" />
+    <page-search
+      :SearchFromConfig="SearchFromConfig"
+      @handleQuery="handleQuery"
+      @handleReset="handleReset"
+    />
+    <page-content
+      ref="contentRef"
+      :TableContentConfig="TableContentConfig"
+      pageName="users"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 
 import PageSearch from '@/components/page-search'
 import PageContent from '@/components/page-content'
 
 import { SearchFromConfig } from './config/search.config'
 import { TableContentConfig } from './config/content.config'
+import { usePageContent } from '@/hooks/usePageContent'
 
 export default defineComponent({
   name: 'users',
-  setup() {
-    const currentPage = ref(4)
+  setup: function () {
+    const [contentRef, handleQuery, handleReset] = usePageContent()
 
-    const handleSizeChange = (value: number) => {
-      console.log(value)
-    }
-    const handleCurrentChange = (value: number) => {
-      console.log(value)
-    }
     return {
       SearchFromConfig,
       TableContentConfig,
-      currentPage,
-      handleSizeChange,
-      handleCurrentChange
+      contentRef,
+      handleReset,
+      handleQuery
     }
   },
   components: {

@@ -3,6 +3,8 @@
     <div class="content">
       <Table
         :listData="dataList"
+        v-model:pageInfo="pageInfo"
+        :listCount="dataCount"
         v-bind="TableContentConfig"
         @selectionChange="selectionChange"
       >
@@ -35,24 +37,11 @@
               <el-icon><Edit /></el-icon>
               <span>修改</span>
             </el-button>
-            <el-button type="danger" size="mini">
+            <el-button size="mini" type="danger">
               <el-icon><Delete /></el-icon>
               <span>删除</span>
             </el-button>
           </div>
-        </template>
-        <template #footer>
-          <el-pagination
-            class="pagination"
-            v-model:currentPage="currentPage"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          >
-          </el-pagination>
         </template>
       </Table>
     </div>
@@ -60,9 +49,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
-import { Edit, Delete, Refresh } from '@element-plus/icons-vue'
+import { computed, defineComponent, ref, watch } from 'vue'
+import { Delete, Edit, Refresh } from '@element-plus/icons-vue'
 import { useStore } from '@/store'
+import Table from '@/components/table/src/Table.vue'
+
 export default defineComponent({
   name: 'page-content',
   props: {
@@ -78,6 +69,7 @@ export default defineComponent({
   components: {
     Edit,
     Delete,
+    Table,
     Refresh
   },
   setup(props) {
@@ -85,21 +77,38 @@ export default defineComponent({
       console.log(value)
     }
 
-    const store = useStore()
-    store.dispatch('systemModule/getPageListAction', {
-      pageName: props.pageName,
-      queryInfo: {
-        offset: 0,
-        size: 10
-      }
+    const pageInfo = ref({ currentPage: 1, pageSize: 3 })
+
+    watch(pageInfo, () => getDataList(), {
+      deep: true
     })
+
+    const store = useStore()
+    const getDataList = (queryInfo: any = {}) => {
+      console.log('@@', queryInfo)
+      store.dispatch('systemModule/getPageListAction', {
+        pageName: props.pageName,
+        queryInfo: {
+          offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
+          size: pageInfo.value.pageSize,
+          ...queryInfo
+        }
+      })
+    }
+    getDataList()
+
     const dataList = computed(() =>
       store.getters['systemModule/getDataList'](props.pageName)
     )
-
+    const dataCount = computed(() =>
+      store.getters['systemModule/getListCount'](props.pageName)
+    )
     return {
       selectionChange,
-      dataList
+      getDataList,
+      dataList,
+      dataCount,
+      pageInfo
     }
   }
 })
@@ -118,10 +127,6 @@ export default defineComponent({
 }
 /deep/.el-table .el-table__cell {
   padding: 5px 0;
-}
-.pagination {
-  text-align: right;
-  margin: 8px 0;
 }
 
 .header-box {

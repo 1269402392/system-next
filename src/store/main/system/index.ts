@@ -47,6 +47,11 @@ const store: Module<ISystemState, IRootState> = {
       return (pageName: string) => {
         return (state as any)[`${pageName}List`]
       }
+    },
+    getListCount(state) {
+      return (pageName: string) => {
+        return (state as any)[`${pageName}Count`]
+      }
     }
   }
 }
