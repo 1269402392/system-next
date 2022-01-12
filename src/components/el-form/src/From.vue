@@ -7,7 +7,12 @@
       <el-row>
         <template v-for="item in formItems" :key="item.label">
           <el-col v-bind="colLayout">
-            <el-form-item :label="item.label" :rules="item.rules" :style="itemStyle">
+            <el-form-item
+              v-if="!item.isHidden"
+              :label="item.label"
+              :rules="item.rules"
+              :style="itemStyle"
+            >
               <template v-if="item.type === 'input' || item.type === 'password'">
                 <el-input
                   v-model="formData[`${item.field}`]"
@@ -106,8 +111,6 @@ export default defineComponent({
   font-size: 20px;
 }
 .ly-form {
-  padding: 0 30px 20px 0;
-  box-sizing: border-box;
 }
 .el-col {
   max-height: 65px;

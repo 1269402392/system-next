@@ -1,7 +1,7 @@
 import LYRequest from './request'
 
 const lyRequest = new LYRequest({
-  baseURL: 'http://152.136.185.210:5000',
+  baseURL: 'http://152.136.185.210:4000',
   interceptors: {
     requestInterceptors: (config) => {
       // if (config.headers) {

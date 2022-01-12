@@ -1,7 +1,12 @@
 import { IRootState } from '@/store/types'
 import { Module } from 'vuex'
 import { ISystemState } from './type'
-import { getPageListData } from '@/network/main/system'
+import {
+  addPageData,
+  deletePageData,
+  editPageData,
+  getPageListData
+} from '@/network/main/system'
 const store: Module<ISystemState, IRootState> = {
   namespaced: true,
   state() {
@@ -9,7 +14,10 @@ const store: Module<ISystemState, IRootState> = {
       usersList: [],
       usersCount: 0,
       roleList: [],
-      roleCount: 0
+      roleCount: 0,
+      goodsList: [],
+      goodsCount: 0,
+      menuList: []
     }
   },
   mutations: {
@@ -24,12 +32,21 @@ const store: Module<ISystemState, IRootState> = {
     },
     changeRoleCount(state, count: number) {
       state.roleCount = count
+    },
+    changeGoodsList(state, list: any[]) {
+      state.goodsList = list
+    },
+    changeGoodsCount(state, count: number) {
+      state.goodsCount = count
+    },
+    changeMenuList(state, list: any[]) {
+      state.menuList = list
     }
   },
   actions: {
     async getPageListAction({ commit }, payload: any) {
-      // 获取pageName并且将首字母转换为大写
       const pageName = payload.pageName
+      // 拼接请求路径
       const pageUrl = `/${payload.pageName}/list`
 
       const {
@@ -40,6 +57,48 @@ const store: Module<ISystemState, IRootState> = {
       const changePageName = pageName.slice(0, 1).toUpperCase() + pageName.slice(1)
       commit(`change${changePageName}List`, list)
       commit(`change${changePageName}Count`, totalCount)
+    },
+    async deleteDataAction({ dispatch }, payload: any) {
+      console.log('@@', payload)
+      const pageUrl = `/${payload.pageName}/${payload.id}`
+
+      await deletePageData(pageUrl)
+
+      dispatch('getPageListAction', {
+        pageName: payload.pageName,
+        queryInfo: {
+          offset: 0,
+          size: 3
+        }
+      })
+    },
+    async addDataAction({ dispatch }, payload: any) {
+      const { pageName, newData } = payload
+      const pageUrl = `/${pageName}`
+
+      await addPageData(pageUrl, newData)
+
+      dispatch('getPageListAction', {
+        pageName: payload.pageName,
+        queryInfo: {
+          offset: 0,
+          size: 3
+        }
+      })
+    },
+    async editDataAction({ dispatch }, payload: any) {
+      const { pageName, editData, id } = payload
+      const pageUrl = `/${pageName}/${id}`
+      console.log(pageName, editData, id)
+      await editPageData(pageUrl, editData)
+
+      dispatch('getPageListAction', {
+        pageName: payload.pageName,
+        queryInfo: {
+          offset: 0,
+          size: 3
+        }
+      })
     }
   },
   getters: {

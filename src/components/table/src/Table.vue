@@ -8,18 +8,21 @@
       :data="listData"
       style="width: 100%"
       @selection-change="handleSelectionChange"
+      v-bind="treeProps"
     >
-      <el-table-column v-if="showSelectCloumn" align="center" type="selection" width="60">
+      <el-table-column v-if="showSelectColumn" align="center" type="selection" width="60">
       </el-table-column>
+
       <el-table-column
-        v-if="showIndexCloumn"
+        v-if="showIndexColumn"
         align="center"
         label="序号"
         type="index"
         width="70"
       ></el-table-column>
+
       <template v-for="(propItem, index) in propList" :key="index">
-        <el-table-column :align="'center'" v-bind="propItem">
+        <el-table-column :align="'center'" show-overflow-tooltip v-bind="propItem">
           <template #default="scope">
             <slot :name="propItem.slotName" :row="scope.row">
               {{ scope.row[propItem.prop] }}
@@ -29,7 +32,7 @@
       </template>
     </el-table>
 
-    <div class="footer">
+    <div v-if="showFooter" class="footer">
       <slot name="footer">
         <el-pagination
           v-model:currentPage="currentPage"
@@ -69,13 +72,21 @@ export default defineComponent({
       type: Array as PropType<ITableType[]>,
       required: true
     },
-    showIndexCloumn: {
+    showIndexColumn: {
       type: Boolean,
       default: false
     },
-    showSelectCloumn: {
+    showSelectColumn: {
       type: Boolean,
       default: false
+    },
+    treeProps: {
+      type: Object,
+      default: () => ({})
+    },
+    showFooter: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['selectionChange', 'update:pageInfo'],
@@ -107,5 +118,7 @@ export default defineComponent({
 .el-pagination {
   text-align: right;
   margin: 8px 0;
+}
+/deep/.el-tooltip {
 }
 </style>

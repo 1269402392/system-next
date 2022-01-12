@@ -13,7 +13,7 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>
+          <el-dropdown-item @click="handleExitClick">
             <el-icon><circle-close /></el-icon>
             <span>退出登陆</span>
           </el-dropdown-item>
@@ -30,11 +30,20 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { ArrowDown, CircleClose, User } from '@element-plus/icons-vue'
+import localCache from '@/utils/cache'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'nav-dropdown.vue',
   setup() {
-    return {}
+    const router = useRouter()
+    const handleExitClick = () => {
+      localCache.deleteCache('token')
+      router.push('/main')
+    }
+    return {
+      handleExitClick
+    }
   },
   components: {
     ArrowDown,
@@ -45,6 +54,9 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+.dropdown {
+  cursor: pointer;
+}
 .el-dropdown-link .el-avatar {
   position: relative;
   top: 8px;

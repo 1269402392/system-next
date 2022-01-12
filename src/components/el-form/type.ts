@@ -8,6 +8,7 @@ export interface IFromItem {
   options?: IOption[]
   otherOptions?: any
   field: string
+  isHidden?: boolean
 }
 
 export interface IForm {

@@ -8,3 +8,24 @@ export function getPageListData(url: string, queryInfo: any, showLoading?: boole
     showLoading: showLoading || false
   })
 }
+export function deletePageData(url: string) {
+  return lyRequest.delete<IDataType>({
+    url: url
+  })
+}
+
+export function addPageData(url: string, newData: any) {
+  return lyRequest.post<IDataType>({
+    url: url,
+    data: newData,
+    showLoading: false
+  })
+}
+
+export function editPageData(url: string, editData: any) {
+  return lyRequest.patch<IDataType>({
+    url: url,
+    data: editData,
+    showLoading: false
+  })
+}

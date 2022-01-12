@@ -1,7 +1,7 @@
 export const TableContentConfig = {
   title: '角色列表',
-  showSelectCloumn: true,
-  showIndexCloumn: true,
+  showSelectColumn: true,
+  showIndexColumn: true,
   propList: [
     { prop: 'name', label: '角色名', minWidth: '60' },
     { prop: 'intro', label: '权限介绍', minWidth: '60' },

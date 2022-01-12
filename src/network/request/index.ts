@@ -67,8 +67,8 @@ class LYRequest {
     return this.request({ ...config, method: 'DELETE' })
   }
 
-  put<T = any>(config: LYRequestConfig<T>): Promise<T> {
-    return this.request({ ...config, method: 'PUT' })
+  patch<T = any>(config: LYRequestConfig<T>): Promise<T> {
+    return this.request({ ...config, method: 'PATCH' })
   }
 
   private request<T>(config: LYRequestConfig<T>): Promise<T> {

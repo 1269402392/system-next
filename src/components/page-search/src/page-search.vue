@@ -65,7 +65,7 @@ export default defineComponent({
 <style lang="less" scoped>
 .page-search {
   background: white;
-  padding: 10px 0;
+  padding: 10px 30px;
   box-sizing: border-box;
   margin-top: 15px;
 

@@ -37,6 +37,7 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
   return routes
 }
 
+// 面包屑导航
 export function pathMapBreadcrumb(userMenu: any[], currentPath: string) {
   const breadcrumb: IBreadcrumb[] = []
   pathMapToMenu(userMenu, currentPath, breadcrumb)
@@ -61,6 +62,23 @@ export function pathMapToMenu(
       }
     }
   }
+}
+
+export function menuToPermission(userMenus: any[]) {
+  const permissions: string[] = [] // 接受递归过滤后的数据
+
+  const _recurseRetPermissions = (menus: any[]) => {
+    for (const menu of menus) {
+      if (menu.type === 1 || menu.type === 2) {
+        _recurseRetPermissions(menu.children ?? [])
+      } else if (menu.type === 3) {
+        permissions.push(menu.permission)
+      }
+    }
+  }
+  _recurseRetPermissions(userMenus) // 调用递归函数
+
+  return permissions
 }
 
 export { firstPath }
