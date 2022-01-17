@@ -22,7 +22,7 @@ import NavMenu from '@/components/nav-menu'
 import NavHeader from '@/components/nav-header'
 
 export default defineComponent({
-  name: 'Main.vue',
+  name: 'Main',
   setup() {
     const collapse = ref(false)
     const foldChange = (isfFold: boolean) => {

@@ -81,4 +81,22 @@ export function menuToPermission(userMenus: any[]) {
   return permissions
 }
 
+export function menuToKeys(menus: any[]) {
+  const treeKeys: number[] = []
+
+  const _recurseNodeKeys = (menuList: any[]) => {
+    for (const item of menuList) {
+      if (item.children) {
+        _recurseNodeKeys(item.children)
+      } else {
+        treeKeys.push(item.id)
+      }
+    }
+  }
+
+  _recurseNodeKeys(menus)
+
+  return treeKeys
+}
+
 export { firstPath }
